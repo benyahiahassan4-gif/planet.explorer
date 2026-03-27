@@ -1321,9 +1321,39 @@ function closeModal(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
 </script>
-<div style="text-align: center; margin: 30px 0; font-family: sans-serif;">
-    <p style="color: #666; font-size: 14px;">Total Explorers</p>
-    <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&left_color=black&right_color=deepskyblue" alt="Visitor Count">
+<div id="mission-target" style="text-align: center; margin: 40px auto; padding: 20px; max-width: 400px; border: 1px dashed deepskyblue; border-radius: 10px; font-family: 'Courier New', Courier, monospace; background: rgba(0, 191, 255, 0.05);">
+    <p style="color: #888; font-size: 12px; margin: 0;">-- CURRENT MISSION TARGET --</p>
+    <h2 id="target-planet-name" style="color: white; text-transform: uppercase; letter-spacing: 5px; margin: 10px 0; text-shadow: 0 0 10px deepskyblue;">SCANNING...</h2>
+    <p id="target-planet-fact" style="color: #ccc; font-size: 14px; font-style: italic;">Accessing planetary database...</p>
 </div>
+
+<script>
+    const planets = [
+        { name: "Mercury", fact: "The smallest planet and closest to the Sun." },
+        { name: "Venus", fact: "The hottest planet in our solar system." },
+        { name: "Mars", fact: "Known as the Red Planet due to iron oxide." },
+        { name: "Jupiter", fact: "The largest planet, with a Great Red Spot storm." },
+        { name: "Saturn", fact: "Famous for its spectacular ring system." },
+        { name: "Uranus", fact: "An ice giant that rotates on its side." },
+        { name: "Neptune", fact: "The most distant major planet from the Sun." }
+    ];
+
+    function updateDailyPlanet() {
+        // This picks a planet based on the current day of the year
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+        
+        const planetIndex = dayOfYear % planets.length;
+        const dailyPlanet = planets[planetIndex];
+
+        document.getElementById('target-planet-name').textContent = dailyPlanet.name;
+        document.getElementById('target-planet-fact').textContent = dailyPlanet.fact;
+    }
+
+    updateDailyPlanet();
+</script>
 </body>
 </html>
