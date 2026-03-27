@@ -1321,39 +1321,53 @@ function closeModal(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
 </script>
-<div id="mission-target" style="text-align: center; margin: 40px auto; padding: 20px; max-width: 400px; border: 1px dashed deepskyblue; border-radius: 10px; font-family: 'Courier New', Courier, monospace; background: rgba(0, 191, 255, 0.05);">
-    <p style="color: #888; font-size: 12px; margin: 0;">-- CURRENT MISSION TARGET --</p>
-    <h2 id="target-planet-name" style="color: white; text-transform: uppercase; letter-spacing: 5px; margin: 10px 0; text-shadow: 0 0 10px deepskyblue;">SCANNING...</h2>
-    <p id="target-planet-fact" style="color: #ccc; font-size: 14px; font-style: italic;">Accessing planetary database...</p>
-</div>
+<section id="mission-control" style="background: #05070a; color: #00d4ff; font-family: 'Courier New', monospace; padding: 40px 20px; border-top: 3px solid #00d4ff; text-align: center; margin-top: 100px; box-shadow: 0 -10px 20px rgba(0, 212, 255, 0.2);">
+    
+    <div style="border: 1px dashed #00d4ff; display: inline-block; padding: 20px; border-radius: 10px; margin-bottom: 30px; background: rgba(0, 212, 255, 0.05);">
+        <p style="text-transform: uppercase; font-size: 12px; letter-spacing: 3px; margin: 0; color: #666;">-- Current Mission Target --</p>
+        <h2 id="target-name" style="margin: 10px 0; font-size: 28px; text-shadow: 0 0 10px #00d4ff;">SCANNING...</h2>
+        <p id="target-fact" style="color: #ccc; font-size: 14px; max-width: 400px; margin: 0 auto;">Initializing planetary database...</p>
+    </div>
 
-<script>
-    const planets = [
-        { name: "Mercury", fact: "The smallest planet and closest to the Sun." },
-        { name: "Venus", fact: "The hottest planet in our solar system." },
-        { name: "Mars", fact: "Known as the Red Planet due to iron oxide." },
-        { name: "Jupiter", fact: "The largest planet, with a Great Red Spot storm." },
-        { name: "Saturn", fact: "Famous for its spectacular ring system." },
-        { name: "Uranus", fact: "An ice giant that rotates on its side." },
-        { name: "Neptune", fact: "The most distant major planet from the Sun." }
-    ];
+    <div style="display: flex; justify-content: center; gap: 50px; flex-wrap: wrap;">
+        <div>
+            <p style="font-size: 12px; color: #666; margin: 0;">[ MISSION TIME UTC ]</p>
+            <p id="utc-clock" style="font-size: 24px; font-weight: bold; margin: 5px 0;">00:00:00</p>
+        </div>
+        <div>
+            <p style="font-size: 12px; color: #666; margin: 0;">[ EXPLORERS LOGGED ]</p>
+            <div style="margin-top: 10px;">
+                <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&left_text=MISSION_VISITORS&left_color=black&right_color=deepskyblue" alt="Visitors">
+            </div>
+        </div>
+    </div>
 
-    function updateDailyPlanet() {
-        // This picks a planet based on the current day of the year
-        const now = new Date();
-        const start = new Date(now.getFullYear(), 0, 0);
-        const diff = now - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        const dayOfYear = Math.floor(diff / oneDay);
+    <p style="margin-top: 30px; font-size: 10px; color: #333;">ENCRYPTED LINK // SYSTEM_VERSION_3.0 // ALL SYSTEMS NOMINAL</p>
+
+    <script>
+        // Clock Logic
+        function startMissionClock() {
+            const now = new Date();
+            const time = now.getUTCHours().toString().padStart(2, '0') + ":" + 
+                         now.getUTCMinutes().toString().padStart(2, '0') + ":" + 
+                         now.getUTCSeconds().toString().padStart(2, '0');
+            document.getElementById('utc-clock').textContent = time;
+        }
+        setInterval(startMissionClock, 1000);
+
+        // Planet Logic
+        const missionPlanets = [
+            { n: "Mars", f: "Searching for signs of ancient water in Jezero Crater." },
+            { n: "Jupiter", f: "Monitoring the Great Red Spot—a storm wider than Earth." },
+            { n: "Saturn", f: "Analyzing the chemical composition of the rings." },
+            { n: "Europa", f: "Scanning subsurface ocean for potential bio-signatures." }
+        ];
+        const today = new Date().getDate() % missionPlanets.length;
+        document.getElementById('target-name').textContent = missionPlanets[today].n;
+        document.getElementById('target-fact').textContent = missionPlanets[today].f;
         
-        const planetIndex = dayOfYear % planets.length;
-        const dailyPlanet = planets[planetIndex];
-
-        document.getElementById('target-planet-name').textContent = dailyPlanet.name;
-        document.getElementById('target-planet-fact').textContent = dailyPlanet.fact;
-    }
-
-    updateDailyPlanet();
-</script>
+        startMissionClock();
+    </script>
+</section>
 </body>
 </html>
