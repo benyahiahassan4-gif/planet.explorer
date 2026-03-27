@@ -1320,55 +1320,38 @@ function closeModal(e) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
-</script>
-<div id="mission-anchor" style="all: initial; display: block; margin-top: 100px;">
-    <section style="background: #000000; color: #00d4ff; font-family: 'Courier New', Courier, monospace; padding: 40px 20px; border-top: 4px solid #00d4ff; text-align: center; display: block !important; visibility: visible !important;">
+</script> 
+<div id="mission-anchor" style="all: initial; display: block; margin-top: 50px; border-top: 5px solid #00d4ff;">
+    <section style="background-color: #000 !important; color: #00d4ff !important; font-family: 'Courier New', Courier, monospace; padding: 40px 20px; text-align: center; display: block !important;">
         
-        <div style="border: 1px dashed #00d4ff; display: inline-block; padding: 20px; border-radius: 10px; margin-bottom: 30px; background: rgba(0, 212, 255, 0.1);">
-            <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 2px; margin: 0; color: #888;">-- Current Mission Target --</p>
-            <h2 id="live-planet-name" style="margin: 10px 0; font-size: 30px; color: #fff; text-shadow: 0 0 10px #00d4ff;">LOADING...</h2>
-            <p id="live-planet-fact" style="color: #00d4ff; font-size: 14px; max-width: 400px; margin: 0 auto; line-height: 1.5;">Connecting to orbital satellite...</p>
+        <div style="border: 1px dashed #00d4ff; display: inline-block; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <p style="font-size: 10px; color: #888;">-- CURRENT MISSION TARGET --</p>
+            <h2 id="target-name" style="color: #fff !important; margin: 10px 0;">SCANNING...</h2>
+            <p id="target-fact" style="color: #00d4ff !important; font-size: 14px;">Initializing orbital link...</p>
         </div>
 
-        <div style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: center; gap: 40px; color: #fff !important;">
             <div>
-                <p style="font-size: 11px; color: #888; margin: 0; letter-spacing: 1px;">[ MISSION TIME UTC ]</p>
-                <p id="live-utc-clock" style="font-size: 26px; font-weight: bold; margin: 5px 0; color: #fff;">00:00:00</p>
+                <p style="font-size: 10px; color: #888;">[ MISSION TIME UTC ]</p>
+                <p id="mission-clock" style="font-size: 22px; font-weight: bold;">00:00:00</p>
             </div>
             <div>
-                <p style="font-size: 11px; color: #888; margin: 0; letter-spacing: 1px;">[ EXPLORERS LOGGED ]</p>
-                <div style="margin-top: 10px;">
-                    <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&left_text=MISSION_VISITORS&left_color=black&right_color=deepskyblue" alt="Visitors">
-                </div>
+                <p style="font-size: 10px; color: #888;">[ EXPLORERS ]</p>
+                <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&right_color=deepskyblue" style="margin-top: 5px;">
             </div>
         </div>
-
-        <p style="margin-top: 40px; font-size: 10px; color: #444; letter-spacing: 1px;">SYSTEM STATUS: ONLINE // DATA RECEPTION: STABLE</p>
 
         <script>
-            (function() {
-                // 1. Mission Clock
-                function tick() {
-                    const now = new Date();
-                    const h = String(now.getUTCHours()).padStart(2, '0');
-                    const m = String(now.getUTCMinutes()).padStart(2, '0');
-                    const s = String(now.getUTCSeconds()).padStart(2, '0');
-                    const clock = document.getElementById('live-utc-clock');
-                    if(clock) clock.textContent = h + ":" + m + ":" + s;
-                }
-                setInterval(tick, 1000); tick();
-
-                // 2. Daily Planet
-                const missionList = [
-                    { n: "Jupiter", f: "The gas giant's Great Red Spot is a storm that has lasted for centuries." },
-                    { n: "Mars", f: "Home to Olympus Mons, the largest volcano discovered in the solar system." },
-                    { n: "Neptune", f: "Winds on this planet can reach speeds of over 1,200 miles per hour." },
-                    { n: "Saturn", f: "Its rings are not solid, but made of billions of ice and rock chunks." }
-                ];
-                const dayIndex = new Date().getDate() % missionList.length;
-                document.getElementById('live-planet-name').textContent = missionList[dayIndex].n;
-                document.getElementById('live-planet-fact').textContent = missionList[dayIndex].f;
-            })();
+            function update() {
+                const n = new Date();
+                document.getElementById('mission-clock').textContent = n.getUTCHours().toString().padStart(2,'0')+":"+n.getUTCMinutes().toString().padStart(2,'0')+":"+n.getUTCSeconds().toString().padStart(2,'0');
+            }
+            setInterval(update, 1000);
+            const p = [{n:"MARS", f:"Home to the solar system's largest volcano."}, {n:"JUPITER", f:"A gas giant so big 1,300 Earths could fit inside."}];
+            const d = new Date().getDate() % p.length;
+            document.getElementById('target-name').textContent = p[d].n;
+            document.getElementById('target-fact').textContent = p[d].f;
+            update();
         </script>
     </section>
 </div>
