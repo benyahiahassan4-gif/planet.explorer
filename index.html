@@ -1,6 +1,49 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<style>
+    #mission-control-root {
+        background: #000;
+        color: #00d4ff;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 40px 20px;
+        border-top: 2px solid #00d4ff;
+        margin-top: 50px;
+        position: relative;
+        z-index: 9999; /* This forces it to the front */
+    }
+
+    .mission-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .mission-card {
+        border: 1px solid #00d4ff;
+        padding: 15px;
+        background: rgba(0, 212, 255, 0.05);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+    }
+
+    .glitch-text {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+        .mission-grid { grid-template-columns: 1fr; }
+    }
+</style>
 <meta name="google-site-verification" content="RmvyYPBGZN7akggMC4AXkJ-BEmosKaWZofsAtjEE9os" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1320,62 +1363,56 @@ function closeModal(e) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
-</script> 
-<section id="mission-control-section" style="display: block !important; width: 100%; background-color: #000; border-top: 2px solid #00d4ff; padding: 60px 0; margin-top: 50px; color: white; font-family: 'Courier New', Courier, monospace;">
-    
-    <div class="container" style="max-width: 1000px; margin: 0 auto; padding: 0 20px; text-align: center;">
+<script>
+    (function() {
+        // Clock Function
+        function updateClock() {
+            const d = new Date();
+            const time = d.getUTCHours().toString().padStart(2,'0') + ":" + 
+                         d.getUTCMinutes().toString().padStart(2,'0') + ":" + 
+                         d.getUTCSeconds().toString().padStart(2,'0') + " UTC";
+            document.getElementById('utc-timer').textContent = time;
+        }
+        setInterval(updateClock, 1000);
+
+        // Planet of the Day Data
+        const planets = [
+            { n: "MARS", f: "Home to Olympus Mons, the tallest volcano in the solar system." },
+            { n: "JUPITER", f: "A gas giant so massive that it contains 70% of the planetary mass in our system." },
+            { n: "VENUS", f: "The hottest planet in the solar system, with surface temperatures around 465°C." },
+            { n: "SATURN", f: "Its rings are 90% water ice." }
+        ];
+
+        const day = new Date().getDate() % planets.length;
+        document.getElementById('target-name-val').textContent = planets[day].n;
+        document.getElementById('target-fact-val').textContent = planets[day].f;
         
-        <div style="background: rgba(0, 212, 255, 0.1); border: 1px solid #00d4ff; border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);">
-            <h3 style="color: #888; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; margin: 0;">System Scan: Active</h3>
-            <h2 id="planet-name" style="font-size: 40px; color: #fff; margin: 15px 0; text-shadow: 0 0 10px #00d4ff;">LOADING...</h2>
-            <p id="planet-fact" style="color: #00d4ff; font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto;">Establishing link to Deep Space Network...</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; align-items: center;">
-            
-            <div style="padding: 15px; border-left: 1px solid #333;">
-                <p style="font-size: 11px; color: #888; margin: 0;">MISSION TIME (UTC)</p>
-                <p id="mission-timer" style="font-size: 28px; font-weight: bold; color: #fff; margin: 5px 0;">00:00:00</p>
-            </div>
-
-            <div style="padding: 15px; border-left: 1px solid #333;">
-                <p style="font-size: 11px; color: #888; margin: 0;">EXPLORERS IN ORBIT</p>
-                <div style="margin-top: 10px;">
-                    <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&left_text=VISITORS&left_color=black&right_color=deepskyblue" alt="Visitor Count">
-                </div>
-            </div>
-
-        </div>
-
-        <p style="margin-top: 50px; font-size: 10px; color: #444; letter-spacing: 2px;">© 2026 PLANET EXPLORER // DATA LINK: SECURE</p>
+        updateClock();
+    })();
+</script>
+</script> 
+<div id="mission-control-root">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <span class="glitch-text" style="font-size: 12px; color: #666;">-- Orbital Command Center --</span>
     </div>
 
-    <script>
-        (function() {
-            // Clock
-            function updateClock() {
-                const now = new Date();
-                const h = String(now.getUTCHours()).padStart(2, '0');
-                const m = String(now.getUTCMinutes()).padStart(2, '0');
-                const s = String(now.getUTCSeconds()).padStart(2, '0');
-                const el = document.getElementById('mission-timer');
-                if(el) el.textContent = h + ":" + m + ":" + s;
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
+    <div class="mission-grid">
+        <div class="mission-card">
+            <p style="font-size: 10px; margin: 0; color: #00d4ff;">[ TARGET SCAN ]</p>
+            <h2 id="target-name-val" style="margin: 10px 0; color: #fff;">SCANNING...</h2>
+            <p id="target-fact-val" style="font-size: 12px; color: #ccc;">Awaiting satellite data...</p>
+        </div>
 
-            // Planet
-            const data = [
-                {n: "JUPITER", f: "The largest planet in our solar system, with a mass more than twice that of all the other planets combined."},
-                {n: "MARS", f: "Often called the 'Red Planet' because iron minerals in the Martian soil oxidize, or rust, causing the soil and atmosphere to look red."},
-                {n: "SATURN", f: "Adorned with a dazzling, complex system of icy rings, Saturn is unique in our solar system."},
-                {n: "NEPTUNE", f: "Dark, cold, and whipped by supersonic winds, ice giant Neptune is the eighth and most distant planet in our solar system."}
-            ];
-            const index = new Date().getDate() % data.length;
-            document.getElementById('planet-name').textContent = data[index].n;
-            document.getElementById('planet-fact').textContent = data[index].f;
-        })();
-    </script>
-</section>
+        <div class="mission-card">
+            <p style="font-size: 10px; margin: 0; color: #00d4ff;">[ SYSTEM CHRONO ]</p>
+            <p id="utc-timer" style="font-size: 24px; font-weight: bold; margin: 10px 0;">00:00:00</p>
+            <hr style="border: 0; border-top: 1px solid #222; margin: 10px 0;">
+            <p style="font-size: 10px; margin: 0; color: #00d4ff;">[ EXPLORERS ]</p>
+            <div style="margin-top: 5px;">
+                <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&right_color=deepskyblue" alt="Count">
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
