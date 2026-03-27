@@ -1321,53 +1321,56 @@ function closeModal(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
 </script>
-<section id="mission-control" style="background: #05070a; color: #00d4ff; font-family: 'Courier New', monospace; padding: 40px 20px; border-top: 3px solid #00d4ff; text-align: center; margin-top: 100px; box-shadow: 0 -10px 20px rgba(0, 212, 255, 0.2);">
-    
-    <div style="border: 1px dashed #00d4ff; display: inline-block; padding: 20px; border-radius: 10px; margin-bottom: 30px; background: rgba(0, 212, 255, 0.05);">
-        <p style="text-transform: uppercase; font-size: 12px; letter-spacing: 3px; margin: 0; color: #666;">-- Current Mission Target --</p>
-        <h2 id="target-name" style="margin: 10px 0; font-size: 28px; text-shadow: 0 0 10px #00d4ff;">SCANNING...</h2>
-        <p id="target-fact" style="color: #ccc; font-size: 14px; max-width: 400px; margin: 0 auto;">Initializing planetary database...</p>
-    </div>
-
-    <div style="display: flex; justify-content: center; gap: 50px; flex-wrap: wrap;">
-        <div>
-            <p style="font-size: 12px; color: #666; margin: 0;">[ MISSION TIME UTC ]</p>
-            <p id="utc-clock" style="font-size: 24px; font-weight: bold; margin: 5px 0;">00:00:00</p>
+<div id="mission-anchor" style="all: initial; display: block; margin-top: 100px;">
+    <section style="background: #000000; color: #00d4ff; font-family: 'Courier New', Courier, monospace; padding: 40px 20px; border-top: 4px solid #00d4ff; text-align: center; display: block !important; visibility: visible !important;">
+        
+        <div style="border: 1px dashed #00d4ff; display: inline-block; padding: 20px; border-radius: 10px; margin-bottom: 30px; background: rgba(0, 212, 255, 0.1);">
+            <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 2px; margin: 0; color: #888;">-- Current Mission Target --</p>
+            <h2 id="live-planet-name" style="margin: 10px 0; font-size: 30px; color: #fff; text-shadow: 0 0 10px #00d4ff;">LOADING...</h2>
+            <p id="live-planet-fact" style="color: #00d4ff; font-size: 14px; max-width: 400px; margin: 0 auto; line-height: 1.5;">Connecting to orbital satellite...</p>
         </div>
-        <div>
-            <p style="font-size: 12px; color: #666; margin: 0;">[ EXPLORERS LOGGED ]</p>
-            <div style="margin-top: 10px;">
-                <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&left_text=MISSION_VISITORS&left_color=black&right_color=deepskyblue" alt="Visitors">
+
+        <div style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap;">
+            <div>
+                <p style="font-size: 11px; color: #888; margin: 0; letter-spacing: 1px;">[ MISSION TIME UTC ]</p>
+                <p id="live-utc-clock" style="font-size: 26px; font-weight: bold; margin: 5px 0; color: #fff;">00:00:00</p>
+            </div>
+            <div>
+                <p style="font-size: 11px; color: #888; margin: 0; letter-spacing: 1px;">[ EXPLORERS LOGGED ]</p>
+                <div style="margin-top: 10px;">
+                    <img src="https://visitor-badge.laobi.icu/badge?page_id=benyahiahassan4-gif.planet-explorer&left_text=MISSION_VISITORS&left_color=black&right_color=deepskyblue" alt="Visitors">
+                </div>
             </div>
         </div>
-    </div>
 
-    <p style="margin-top: 30px; font-size: 10px; color: #333;">ENCRYPTED LINK // SYSTEM_VERSION_3.0 // ALL SYSTEMS NOMINAL</p>
+        <p style="margin-top: 40px; font-size: 10px; color: #444; letter-spacing: 1px;">SYSTEM STATUS: ONLINE // DATA RECEPTION: STABLE</p>
 
-    <script>
-        // Clock Logic
-        function startMissionClock() {
-            const now = new Date();
-            const time = now.getUTCHours().toString().padStart(2, '0') + ":" + 
-                         now.getUTCMinutes().toString().padStart(2, '0') + ":" + 
-                         now.getUTCSeconds().toString().padStart(2, '0');
-            document.getElementById('utc-clock').textContent = time;
-        }
-        setInterval(startMissionClock, 1000);
+        <script>
+            (function() {
+                // 1. Mission Clock
+                function tick() {
+                    const now = new Date();
+                    const h = String(now.getUTCHours()).padStart(2, '0');
+                    const m = String(now.getUTCMinutes()).padStart(2, '0');
+                    const s = String(now.getUTCSeconds()).padStart(2, '0');
+                    const clock = document.getElementById('live-utc-clock');
+                    if(clock) clock.textContent = h + ":" + m + ":" + s;
+                }
+                setInterval(tick, 1000); tick();
 
-        // Planet Logic
-        const missionPlanets = [
-            { n: "Mars", f: "Searching for signs of ancient water in Jezero Crater." },
-            { n: "Jupiter", f: "Monitoring the Great Red Spot—a storm wider than Earth." },
-            { n: "Saturn", f: "Analyzing the chemical composition of the rings." },
-            { n: "Europa", f: "Scanning subsurface ocean for potential bio-signatures." }
-        ];
-        const today = new Date().getDate() % missionPlanets.length;
-        document.getElementById('target-name').textContent = missionPlanets[today].n;
-        document.getElementById('target-fact').textContent = missionPlanets[today].f;
-        
-        startMissionClock();
-    </script>
-</section>
+                // 2. Daily Planet
+                const missionList = [
+                    { n: "Jupiter", f: "The gas giant's Great Red Spot is a storm that has lasted for centuries." },
+                    { n: "Mars", f: "Home to Olympus Mons, the largest volcano discovered in the solar system." },
+                    { n: "Neptune", f: "Winds on this planet can reach speeds of over 1,200 miles per hour." },
+                    { n: "Saturn", f: "Its rings are not solid, but made of billions of ice and rock chunks." }
+                ];
+                const dayIndex = new Date().getDate() % missionList.length;
+                document.getElementById('live-planet-name').textContent = missionList[dayIndex].n;
+                document.getElementById('live-planet-fact').textContent = missionList[dayIndex].f;
+            })();
+        </script>
+    </section>
+</div>
 </body>
 </html>
