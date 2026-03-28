@@ -711,10 +711,10 @@ nav.visible { transform: translateY(0); }
   <h2 class="section-title">L'ORRERY — SYSTÈME EN MOUVEMENT</h2>
   <p class="section-sub">Représentation artistique des orbites planétaires (échelle non proportionnelle)</p>
   <div class="orrery-container">
-    <div class="orrery-svg-wrap">
-      <svg id="orrerySVG" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg"></svg>
-    </div>
+  <div class="orrery-svg-wrap">
+  <div id="three-container" style="width:100%; height:500px;"></div>
   </div>
+</div>
 </section>
 
 <!-- SIZE COMPARISON -->
@@ -760,7 +760,7 @@ nav.visible { transform: translateY(0); }
     </div>
   </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ═══════════ DATA ═══════════
 const planets = [
@@ -1102,7 +1102,8 @@ function launchExplorer() {
   });
   setTimeout(() => {
     document.getElementById('orrery').scrollIntoView({behavior:'smooth'});
-    buildOrrery();
+    container.innerHTML = "";
+    build3DSolarSystem();
     buildSizeBars();
     renderPlanets();
   }, 100);
@@ -1347,6 +1348,53 @@ function closeModal(e) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+function build3DSolarSystem() {
+  const container = document.getElementById("three-container");
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    container.clientWidth / 500,
+    0.1,
+    1000
+  );
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true });
+  renderer.setSize(container.clientWidth, 500);
+  container.appendChild(renderer.domElement);
+
+  // 🌞 Sun
+  const sunGeo = new THREE.SphereGeometry(2, 32, 32);
+  const sunMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+  const sun = new THREE.Mesh(sunGeo, sunMat);
+  scene.add(sun);
+
+  // 🌍 Earth
+  const earthGeo = new THREE.SphereGeometry(1, 32, 32);
+  const earthMat = new THREE.MeshBasicMaterial({ color: 0x0077ff });
+  const earth = new THREE.Mesh(earthGeo, earthMat);
+  scene.add(earth);
+
+  let angle = 0;
+
+  camera.position.z = 8;
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    angle += 0.01;
+
+    // Orbit
+    earth.position.x = Math.cos(angle) * 5;
+    earth.position.z = Math.sin(angle) * 5;
+
+    earth.rotation.y += 0.02;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+}
 </script> 
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PBT36TX9"
