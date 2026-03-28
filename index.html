@@ -709,6 +709,7 @@ nav.visible { transform: translateY(0); }
 <section class="orrery-section" id="orrery" style="display:none">
   <div class="section-label">◈ VISUALISATION ◈</div>
   <h2 class="section-title">L'ORRERY — SYSTÈME EN MOUVEMENT</h2>
+  <div id="three-container" style="width:100%; height:500px;"></div>
   <p class="section-sub">Représentation artistique des orbites planétaires (échelle non proportionnelle)</p>
   <div class="orrery-container">
   <div class="orrery-svg-wrap">
@@ -1103,7 +1104,9 @@ function launchExplorer() {
   setTimeout(() => {
     document.getElementById('orrery').scrollIntoView({behavior:'smooth'});
     container.innerHTML = "";
-    build3DSolarSystem();
+    window.addEventListener("load", () => {
+  build3DSolarSystem();
+});
     buildSizeBars();
     renderPlanets();
   }, 100);
@@ -1351,6 +1354,13 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBt
 function build3DSolarSystem() {
   const container = document.getElementById("three-container");
 
+  if (!container) {
+    console.log("3D container not found yet");
+    return;
+  }
+
+  container.innerHTML = "";
+
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -1363,33 +1373,17 @@ function build3DSolarSystem() {
   renderer.setSize(container.clientWidth, 500);
   container.appendChild(renderer.domElement);
 
-  // 🌞 Sun
-  const sunGeo = new THREE.SphereGeometry(2, 32, 32);
-  const sunMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-  const sun = new THREE.Mesh(sunGeo, sunMat);
-  scene.add(sun);
+  const geometry = new THREE.SphereGeometry(1, 32, 32);
+  const material = new THREE.MeshBasicMaterial({ color: 0x0077ff });
 
-  // 🌍 Earth
-  const earthGeo = new THREE.SphereGeometry(1, 32, 32);
-  const earthMat = new THREE.MeshBasicMaterial({ color: 0x0077ff });
-  const earth = new THREE.Mesh(earthGeo, earthMat);
-  scene.add(earth);
+  const planet = new THREE.Mesh(geometry, material);
+  scene.add(planet);
 
-  let angle = 0;
-
-  camera.position.z = 8;
+  camera.position.z = 3;
 
   function animate() {
     requestAnimationFrame(animate);
-
-    angle += 0.01;
-
-    // Orbit
-    earth.position.x = Math.cos(angle) * 5;
-    earth.position.z = Math.sin(angle) * 5;
-
-    earth.rotation.y += 0.02;
-
+    planet.rotation.y += 0.01;
     renderer.render(scene, camera);
   }
 
